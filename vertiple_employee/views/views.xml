@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+       <record model="ir.ui.view" id="hr_inherit">
+            <field name="name">hr employee inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+              <data>    
+                <xpath expr="//form/*" position="before">
+                    <header>
+                      <field name="state" widget="statusbar"/>
+                    </header>
+                </xpath>
+
+
+                <xpath expr="//field[@name='name']" position="after">
+                  <div class="oe_title">
+                    <group>
+                      <field name="first_name" placeholder="First Name"/>
+                      <field name="last_name" placeholder="Last Name"/>
+                      <field name="count" invisible="1"/>
+                  </group>
+                </div>
+                </xpath>
+                <xpath expr="//field[@name='department_id']" position="before">
+                  <field name="emp_id"/>
+                  <button type="object" icon="fa-cogs" invisible="1"/>
+                </xpath>
+                
+                <xpath expr="//field[@name='emp_id']" position="after">
+                  <button type="object" string="Generate" name="generate_emp"/>
+                </xpath>
+
+                <xpath expr="//field[@name='bank_account_id']" position="after">
+                    <field name="pf_acc_number"/>
+                    <field name="fathers_name"/>
+                    <field name="mothers_name"/>
+                    <field name="spouse_name"/>
+                    <field name="blood_group"/>
+                </xpath>
+
+                <xpath expr="//field[@name='birthday']" position="after">
+                  <field name="birthday_as_per_cert"/>
+                </xpath>
+
+               <!--  <xpath expr="//field[@name='em']" position="before">
+                  <field name="emp_id"/>
+                  
+                </xpath>
+                <button type="object" icon="fa-cogs" invisible="1"/>
+                <xpath expr="//field[@name='emp_id']" position="after">
+                  <button type="object" string="Generate" name="generate_emp"/>
+                </xpath> -->
+
+                <xpath expr="//field[@name='mobile_phone']" position="before">
+                  <field name="working_address" groups="vertiple_employee.only_employee"/>
+                </xpath>
+
+                <xpath expr="//button[@name='toggle_active']" position="before">
+                    <field name="check_field" invisible="1"/>
+                    <button name="emp_resign" confirm="Are you sure? You want to raise a Resign Request?" type="object" string="Request Resign" attrs="{'invisible': [('check_field', '=', False)]}" />
+                </xpath>
+
+                <!-- <xpath expr="//page[@name='public']//field[@name='work_phone']" position="after">
+                    <field name="work_phone" position="attributes">
+                      <attribute name="invisible">True</attribute>
+                    </field> </xpath>-->
+
+               <!--Actions Tab page-->
+               <xpath expr="//page[@name='hr_settings']" position="after">
+                  <page name="actions" string="Actions" groups="hr.group_hr_user">
+                      <group string='Manager Actions' name="active_group" >
+                          <field name="manager_status" help="Employee's current status of Approval/Refusal from Manager"/>
+                          <field name="manager_feedback" /><br></br><br></br>
+                          <button string="Approve" name="manager_approve" type="object" groups="hr.group_only_user" class="oe_highlight oe_edit_only" style="width: 35%" help="This button lets you approve the Employee"/>
+                          <button string="Refuse" name="manager_refuse" type="object" groups="hr.group_only_user" class="oe_highlight oe_edit_only" style="width: 35%" help="This button lets you refuse the Employee"/>
+                      </group>                                                                        
+                      
+                      <group string='HR Actions' name="active_group" groups="hr.group_hr_manager" >
+                          <field name="hr_status" help="Employee's current status of Approval/Refusal from HR"/>
+                          <field name="hr_feedback"  groups="hr.group_hr_manager"/><br></br><br></br>
+                          <button string="Approve" name="hr_approve" type="object" groups="hr.group_hr_manager" class="oe_highlight oe_edit_only"
+                           style="width: 35%" help="This button lets you approve the Employee"/>
+                          <button string="Refuse" name="hr_refuse" type="object" groups="hr.group_hr_manager" class="oe_highlight oe_edit_only" style="width: 35%" help="This button lets you refuse the Employee"/><br></br><br></br>
+                          <button string="System Setup Request" name="send_system_setup_mail" type="object" groups="hr.group_hr_manager" class="oe_highlight" style="width: 35%"
+                          help="Send's an email request to IT team for System Setup and generation of new email for an Employee"/>
+                      </group>
+                      
+                      <group string='Administrator Actions' name="active_group" groups="base.group_system">
+                          <button string="Reset to Probation" name="set_to_probation" type="object" style="width: 35%" class="oe_highlight oe_edit_only" help="This button lets you to reset the state of an employee to 'Probation'"/>
+                          <button string="Confirm" name="set_to_confirm" type="object" style="width: 35%" class="oe_highlight oe_edit_only" help="This button lets you to set the state of an employee to 'Confirm'"/><br></br><br></br>
+                          <button string="Manager review" name="set_to_manager_review" type="object" style="width: 35%" class="oe_highlight oe_edit_only" help="This button lets you to set the state of an employee to 'Manager Review'"/>
+                          <button string="Exit" name="set_to_exit" type="object"  style="width: 35%" class="oe_highlight oe_edit_only" help="This button lets you to set the state of an employee to 'Exit'"/>
+                      </group> 
+                  </page>
+                </xpath>
+
+              </data>
+            </field>
+        </record>
+
+<!--     Blood Group     -->
+
+         <record model="ir.ui.view" id="blood_group_form">
+            <field name="name">vertiple_employee.blood_group.form</field>
+            <field name="model">vertiple_employee.blood_group</field>
+            <field name="arch" type="xml">
+                <form string="Blood Group">
+                    <sheet>
+                        <group>       
+                            <field name='name'/>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="blood_group_form_action">
+            <field name="name">Blood Group</field>
+            <field name="res_model">vertiple_employee.blood_group</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create Blood Group</p>
+            </field>
+        </record>
+
+        <menuitem id="blood_group_menu_item" name="Blood Groups" 
+            parent="hr.menu_human_resources_configuration"
+            action="blood_group_form_action" 
+            sequence="1"/>
+
+
+      <!--Employee_id Form-->
+
+        <record model="ir.ui.view" id="employee_id_form">
+            <field name="name">Employee ID</field>
+            <field name="model">vertiple_employee.employee_id</field>
+            <field name="arch" type="xml">
+                <form string="Employee ID">
+                      <div>
+                        <group>       
+                            <field name='prefix'/>
+                            <field name='len_prefix' class="oe_inline" attrs="{'invisible': [('prefix', '!=', 'custom')]}"/>
+                            <field name='prefix_string' class="oe_inline" attrs="{'invisible': [('prefix', '!=', 'custom')]}"/>
+
+                            <field name='suffix'/>
+                            <field name='len_suffix' class="oe_inline" attrs="{'invisible': [('suffix', '!=', 'custom')]}"/>
+                            <field name='suffix_string' class="oe_inline" attrs="{'invisible': [('suffix', '!=', 'custom')]}"/>
+                            <field name='main_sequence'/>
+                            <field name='length_rand' class="oe_inline" attrs="{'invisible': [('main_sequence', '!=', 'rand')]}"/>
+                            
+                            <field name= 'length_seq' class="oe_inline" attrs="{'invisible': [('main_sequence', '!=', 'seq')]}"/>
+                            <field name= 'starting_num' class="oe_inline" attrs="{'invisible': [('main_sequence', '!=', 'seq')]}"/>
+                            <field name='separator'/> 
+                       </group>
+                       <footer>
+                            <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                            <button string="Cancel" type="object" name="cancel" class="oe_link" special="cancel"/>
+                      </footer>
+                     </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="employee_id_form_action">
+            <field name="name">Employee ID</field>
+            <field name="res_model">vertiple_employee.employee_id</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="target">new</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create Employee id</p>
+            </field>
+        </record>
+
+
+
+
+        <!--Features-->
+
+        <record model="ir.ui.view" id="employee_config_form">
+            <field name="name">Features </field>
+            <field name="model">vertiple_employee.employee_config</field>
+            <field name="arch" type="xml">
+                <form string="Employee Config" class="oe_form_configuration">
+                  <header>
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        <button string="Cancel" type="object" name="cancel" class="oe_link" special="cancel"/>
+                    </header>
+                        <group> 
+                          <label for="id" string="Auto Generate Employee id" name="email_label"/>
+                          <div>
+                           <!--  <field name='new_field'></field> -->
+                            <field name='is_active'></field>
+                            <label for="is_active"/>
+                        <button type="action" name="%(employee_id_form_action)d" string="Configure Employee id" icon="fa-cogs" class="oe_inline oe_link" 
+                          attrs="{'invisible': [('is_active', '!=', True)]}"/>
+                                
+                            
+                          </div>
+                       </group>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="employee_config_form_action">
+            <field name="name">Features</field>
+            <field name="res_model">vertiple_employee.employee_config</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+        <menuitem id="menu_employee_config" name="Features" 
+            parent="hr.menu_human_resources_configuration" 
+            action="employee_config_form_action"
+            sequence="10"/>
+
+        
+
+        <!--Suffix-->
+<!-- 
+        <record model="ir.ui.view" id="employee_id_form">
+            <field name="name">vertiple_employee.suffix.form</field>
+            <field name="model">vertiple_employee.suffix</field>
+            <field name="arch" type="xml">
+                <form string="Suffix">
+                    <sheet>
+                        <group>       
+                            <field name='name'/>
+                            <field name= 'size'/>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="suffix_form_action">
+            <field name="name">Employee id</field>
+            <field name="res_model">vertiple_employee.suffix</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create suffix</p>
+            </field>
+        </record>
+ -->
+      <!--Prefix-->
+   <!--    <record model="ir.ui.view" id="prefix_form">
+            <field name="name">vertiple_employee.prefix.form</field>
+            <field name="model">vertiple_employee.prefix</field>
+            <field name="arch" type="xml">
+                <form string="Prefix">
+                    <sheet>
+                        <group>       
+                            <field name='name'/>
+                            <field name= 'size'/>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="prefix_form_action">
+            <field name="name">Employee id</field>
+            <field name="res_model">vertiple_employee.prefix</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create Prefix</p>
+            </field>
+        </record>  -->  
+
+
+      <!--Main-->   
+      <!--  <record model="ir.ui.view" id="main_form">
+            <field name="name">vertiple_employee.main.form</field>
+            <field name="model">vertiple_employee.main</field>
+            <field name="arch" type="xml">
+                <form string="Mid">
+                    <sheet>
+                        <group>       
+                            <field name='name'/>
+                            <field name= 'size'/>
+                       </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="main_form_action">
+            <field name="name">Mid</field>
+            <field name="res_model">vertiple_employee.main</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create Mid</p>
+            </field>
+        </record>
+ -->
+
+
+
+
+</odoo>
